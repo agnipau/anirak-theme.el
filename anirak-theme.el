@@ -394,6 +394,11 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
 ;;    ("}" 1 'font-lock-type-face))
 ;;  1)
 
+;;;###autoload
+(when (and (boundp 'custom-theme-load-path) load-file-name)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
+
 (provide-theme 'anirak)
 
 ;;; anirak-theme.el ends here
