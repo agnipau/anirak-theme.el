@@ -110,6 +110,35 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
                         (let ,(mapcar (lambda (x) `(,(car x) ,(cdr x))) anirak-colors)
                           ,body))))))
 
+;; Define new faces
+(defvar font-lock-noise 'font-lock-noise
+  "Face name to use for noise symbols like braces, brackets, parenthesis acc.")
+(defface font-lock-noise
+  '()
+  "Face name to use for noise symbols like braces, brackets, parenthesis acc."
+  :group 'font-lock-faces)
+
+(defvar font-lock-number-literal 'font-lock-number-literal
+  "Face name to use for number literals.")
+(defface font-lock-number-literal
+  '()
+  "Face name to use for number literals."
+  :group 'font-lock-faces)
+
+(defvar font-lock-boolean-literal 'font-lock-boolean-literal
+  "Face name to use for boolean literals.")
+(defface font-lock-boolean-literal
+  '()
+  "Face name to use for boolean literals."
+  :group 'font-lock-faces)
+
+(defvar font-lock-operator 'font-lock-operator
+  "Face name to use for operators.")
+(defface font-lock-operator
+  '()
+  "Face name to use for operators."
+  :group 'font-lock-faces)
+
 ;; theme
 (set-theme
  `(
@@ -132,13 +161,22 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (font-lock-doc-string-face (:foreground ,debugging))
    ;; Function name
    (font-lock-function-name-face (:foreground ,white :weight bold))
+   ;; Noise symbols -> { } , ( ) [ ] :
+   (font-lock-noise (:foreground ,gray))
+   ;; Number literals
+   (font-lock-number-literal (:foreground ,green))
+   ;; Boolean literals
+   (font-lock-boolean-literal (:foreground ,green))
+   ;; Operators
+   (font-lock-operator (:foreground ,gray))
    ;; Keyword
    (font-lock-keyword-face (:foreground ,cyan))
-   (font-lock-negation-char-face (:foreground ,debugging))
+   ;; In regexp string, the caret -> [^z-a]
+   (font-lock-negation-char-face (:foreground ,gray))
    (font-lock-preprocessor-face (:foreground ,white :weight bold))
    (font-lock-preprocessor-char-face (:foreground ,debugging))
-   (font-lock-regexp-grouping-backslash (:foreground ,debugging))
-   (font-lock-regexp-grouping-construct (:foreground ,debugging))
+   (font-lock-regexp-grouping-backslash (:foreground ,gray-darker))
+   (font-lock-regexp-grouping-construct (:foreground ,gray))
    ;; String
    (font-lock-string-face (:foreground ,blue))
    ;; TODO: Not sure
@@ -147,14 +185,15 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (font-lock-variable-name-face (:foreground ,white))
    ;; Warning (like `error')
    (font-lock-warning-face (:weight bold :foreground ,lint-warning-fg :background ,lint-warning-bg))
-   (shadow (:foreground ,debugging))
+   (shadow (:foreground ,gray))
    (success (:foreground ,debugging))
    (error (:foreground ,debugging))
    (warning (:foreground ,debugging))
-   (tooltip (:foreground ,debugging :background ,black :inverse-video t))
-   
+   (tooltip (:foreground ,debugging :background ,green :inverse-video t))
+
    ;; Emacs interface
-   (cursor (:background ,blue-cursor))
+   ;; NOTE: Emacs ignores foreground for cursor.
+   (cursor (:background ,blue-cursor :foreground ,white))
    ;; TODO: Long line break arrow fringe
    (fringe (:background ,black :foreground ,gray-darker))
    ;; Line numbers
@@ -167,15 +206,15 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    ;; Vertical border that separates windows
    (vertical-border (:foreground ,gray-darkest))
    (border (:background ,debugging :foreground ,debugging))
-   (highlight (:inverse-video nil :background ,debugging))
+   (highlight (:background ,blue-selection :foreground nil))
    ;; Active mode line
-   (mode-line ((t (:foreground ,white :background ,gray-darkest :weight normal
-                               :box (:line-width 1 :color ,debugging)))))
-   (mode-line-buffer-id (:foreground ,debugging :background nil))
+   (mode-line (:foreground ,white :background ,gray-darkest :weight normal
+                           :box (:line-width 1 :color ,gray-darkest)))
+   (mode-line-buffer-id (:foreground ,debugging :background ,gray))
    ;; Inactive mode line
    (mode-line-inactive (:inherit mode-line
                                  :foreground ,gray-darker
-                                 :background ,black-cursor-line))
+                                 :background ,black))
    (mode-line-emphasis (:foreground ,debugging :slant italic))
    ;; TODO: Not sure
    (mode-line-highlight (:background ,blue-selection :box nil))
@@ -185,9 +224,9 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (secondary-selection (:background ,debugging :foreground nil :extend t))
    ;; Header line
    (header-line (:inherit mode-line-inactive :foreground ,white :background nil))
-   
+
    ;; search
-   (match (:foreground ,debugging :background ,debugging :inverse-video t))
+   (match (:foreground ,lint-info-fg :background ,lint-info-bg))
    ;; Active search result
    (isearch (:background ,highlight-active))
    ;; Inactive search results
@@ -198,7 +237,7 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (link (:foreground ,cyan :underline t))
    (widget-button (:foreground ,debugging :background ,debugging :underline t))
    (widget-field (:background ,debugging :box (:line-width 1 :color ,debugging)))
-   
+
    ;; ansi-term (built-in)
    ;; Color 0
    (term (:foreground nil :background nil :inherit default))
@@ -218,7 +257,7 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (term-color-cyan (:foreground ,term-6 :background ,term-6))
    ;; Color 7
    (term-color-white (:foreground ,term-7 :background ,term-7))
-   
+
    ;; vterm
    (vterm-color-default (:foreground nil :background nil :inherit default))
    (vterm-color-black (:background ,term-0 :foreground ,term-0))
@@ -229,7 +268,7 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (vterm-color-magenta (:background ,term-5 :foreground ,term-5))
    (vterm-color-cyan (:background ,term-6 :foreground ,term-6))
    (vterm-color-white (:background ,term-7 :foreground ,term-7))
-   
+
    ;; eshell (built-in)
    (eshell-prompt (:foreground ,gray :weight bold))
    ;; .zip files for example
@@ -246,28 +285,28 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (eshell-ls-symlink (:foreground ,cyan :weight bold))
    ;; TODO: Not sure
    (eshell-ls-unreadable (:foreground ,gray-darker))
-   
+
    ;; ElDoc (built-in)
    ;; Bottom line function ARGS keyword
    (eldoc-highlight-function-argument (:foreground ,green :weight bold))
-   
+
    ;; Flycheck (built-in)
    (flycheck-error (:background ,lint-error-bg :foreground ,lint-error-fg))
    (flycheck-info (:background ,lint-info-bg :foreground ,lint-info-fg))
    (flycheck-warning (:background ,lint-warning-bg :foreground ,lint-warning-fg))
-   (flycheck-fringe-error (:background ,lint-error-bg :foreground ,lint-error-fg))
-   (flycheck-fringe-info (:background ,lint-info-bg :foreground ,lint-info-fg))
-   (flycheck-fringe-warning (:background ,lint-warning-bg, :foreground ,lint-warning-fg))
+   (flycheck-fringe-error (:background ,lint-error-fg :foreground ,lint-error-fg))
+   (flycheck-fringe-info (:background ,lint-info-fg :foreground ,lint-info-fg))
+   (flycheck-fringe-warning (:background ,lint-warning-fg, :foreground ,lint-warning-fg))
    (flycheck-color-mode-line-error-face (:foreground ,debugging))
    (flycheck-color-mode-line-warning-face (:foreground ,debugging))
    (flycheck-color-mode-line-info-face (:foreground ,debugging))
    (flycheck-color-mode-line-running-face (:foreground ,debugging))
    (flycheck-color-mode-line-success-face (:foreground ,debugging))
-   
+
    ;; Parenthesis matching (built-in)
    (show-paren-match (:background ,gray-darkest))
    (show-paren-mismatch (:background nil :foreground nil))
-   
+
    ;; whitespace (built-in)
    (whitespace-big-indent (:background ,debugging :foreground ,debugging))
    (whitespace-empty (:background ,debugging :foreground ,debugging))
@@ -282,12 +321,12 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (whitespace-tab (:foreground ,gray-darker))
    (whitespace-trailing (:underline (:style wave :color ,lint-error-fg)))
    (trailing-whitespace (:inherit whitespace-trailing))
-   
+
    ;; window-divider (built-in)
    (window-divider (:foreground ,debugging))
    (window-divider-first-pixel (:foreground ,debugging))
    (window-divider-last-pixel (:foreground ,debugging))
-   
+
    ;; company
    (company-preview (:foreground ,debugging :background ,debugging))
    ;; Last suggestion that gets previewed in the line
@@ -309,7 +348,7 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    ;; Scrollbar background
    (company-scrollbar-fg (:background ,menu-active-bg))
    (company-echo-common (:inherit company-echo :foreground ,debugging))
-   
+
    ;; Ivy
    ;; TODO: Mouse hover
    (ivy-action (:foreground ,debugging))
@@ -319,22 +358,22 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (ivy-match-required-face (:foreground ,debugging :background ,green))
    (ivy-remote (:foreground ,debugging))
    (ivy-subdir (:foreground ,cyan))
-   (ivy-virtual (:foreground ,debugging))
+   (ivy-virtual (:foreground ,gray))
    (ivy-minibuffer-match-face-1 (:foreground ,white :weight bold))
    (ivy-minibuffer-match-face-2 (:foreground ,white :weight bold))
    (ivy-minibuffer-match-face-3 (:foreground ,white :weight bold))
    (ivy-minibuffer-match-face-4 (:foreground ,white :weight bold))
    (ivy-highlight-face (:foreground ,debugging :weight bold))
    (ivy-minibuffer-match-highlight (:foreground ,debugging))
-   (ivy-modified-buffer (:foreground ,gray))
-   (ivy-modified-outside-buffer (:foreground ,gray))
+   (ivy-modified-buffer (:foreground ,white))
+   (ivy-modified-outside-buffer (:foreground ,white))
    (ivy-prompt-match (:foreground ,debugging))
    (ivy-separator (:foreground ,debugging))
    (ivy-grep-info (:foreground ,debugging))
    (ivy-grep-line-number (:foreground ,debugging))
    (ivy-completions-annotations (:foreground ,debugging))
    (ivy-yanked-word (:foreground ,debugging))
-   
+
    ;; markdown
    (markdown-url-face (:foreground ,white :underline t))
    (markdown-link-face (:foreground ,blue))
@@ -345,8 +384,9 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (markdown-code-face (:inherit fixed-pitch))
    ;; TODO: Define fixed-pitch font
    (markdown-inline-code-face (:inherit markdown-code-face))
-   
+
    ;; lsp
+   ;; TODO: Find face for the white sideline text.
    (lsp-face-highlight-textual (:background ,highlight-active))
    (lsp-face-highlight-read (:background ,highlight-inactive))
    (lsp-face-highlight-write (:foreground ,debugging :background ,debugging))
@@ -358,15 +398,20 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (lsp-ui-peek-peek (:foreground ,debugging :background ,debugging))
    (lsp-ui-peek-highlight (:foreground ,debugging :background ,debugging))
    (lsp-ui-peek-line-number (:foreground ,debugging :background ,debugging))
-   (lsp-ui-sideline-code-action (:foreground ,debugging :background ,debugging))
+   ;; Action text on the right side.
+   (lsp-ui-sideline-code-action (:foreground ,lint-hint-fg :background ,lint-hint-bg))
    (lsp-ui-sideline-current-symbol (:foreground ,debugging :background ,debugging))
    (lsp-ui-sideline-symbol-info (:foreground ,debugging :background ,debugging))
    ))
 
 (eval-with-colors
  (
+  ;; lsp-ui
+  (setq lsp-ui-doc-border gray-darker)
+
   ;; rustic
-  (setq rustic-ansi-faces `[,term-0 ,term-1 ,term-2 ,term-3 ,term-4 ,term-5 ,term-6 ,term-7])
+  (setq rustic-ansi-faces `[,term-0 ,term-1 ,term-2 ,term-3
+                                    ,term-4 ,term-5 ,term-6 ,term-7])
   ;; hl-todo
   (setq hl-todo-keyword-faces
         `(;; For things that need to be done, just not today.
@@ -388,11 +433,185 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
           ;; For things that just gotta go and will soon be gone.
           ("DEPRECATED" . ,green)))))
 
-;; (font-lock-add-keywords
-;;  'rustic-mode
-;;  '(("{" 1 'font-lock-type-face)
-;;    ("}" 1 'font-lock-type-face))
-;;  1)
+;; c-mode
+(font-lock-add-keywords 'c-mode
+                        `(
+                          ,(rx (and
+                               symbol-start
+                               (or (and (+ digit)
+                                        (? (and "." (* digit)))
+                                        (? (and (any "eE")
+                                                (? (any "-+"))
+                                                (+ digit))))
+                                   (and "0"
+                                        (any "xX")
+                                        (+ hex-digit)))
+                               (? (or "f" "F"
+                                      "u" "U"
+                                      "l" "L"
+                                      "ll" "lL" "Ll" "LL"
+                                      "ul" "uL" "Ul" "UL"
+                                      "lu" "lU" "Lu" "LU"
+                                      "ull" "ulL" "uLl" "uLL" "Ull" "UlL" "ULl" "ULL"
+                                      "llu" "llU" "lLu" "lLU" "Llu" "LlU" "LLu" "LLU"))
+                               symbol-end))
+                          . font-lock-number-literal))
+
+;; c++-mode
+(font-lock-add-keywords 'c++-mode
+                        `(
+                          ,(rx (and
+                               symbol-start
+                               (or (and (+ digit)
+                                        (? (and "." (* digit)))
+                                        (? (and (any "eE")
+                                                (? (any "-+"))
+                                                (+ digit))))
+                                   (and "0"
+                                        (any "xX")
+                                        (+ hex-digit)))
+                               (? (and (any "_" "A-Z" "a-z")
+                                       (* (any "_" "A-Z" "a-z" "0-9"))))
+                               symbol-end))
+                          . font-lock-number-literal))
+
+;; emacs-lisp-mode
+(font-lock-add-keywords 'emacs-lisp-mode
+                        `(
+                          ;; Boolean literals
+                          (,(rx (and symbol-start
+                                     (or "t" "nil")
+                                     symbol-end))
+                           . 'font-lock-boolean-literal)
+
+                          ;; Number literals
+                          (,(rx (and
+                                (or (and
+                                     symbol-start
+                                     (or
+                                      (and
+                                       (? (any "-+"))
+                                       (+ digit)
+                                       (? (or (and (any "eE")
+                                                   (? (any "-+"))
+                                                   (or (+ digit)
+                                                       "INF"
+                                                       "NaN"))
+                                              (and "."
+                                                   (? (and (+ digit)
+                                                           (? (and
+                                                               (any "eE")
+                                                               (? (any "-+"))
+                                                               (or (+ digit)
+                                                                   "INF"
+                                                                   "NaN")))))))))
+                                      (and
+                                       "."
+                                       (+ digit)
+                                       (? (and
+                                           (any "eE")
+                                           (? (any "-+"))
+                                           (or (+ digit)
+                                               "INF"
+                                               "NaN"))))))
+                                    (and "#"
+                                         symbol-start
+                                         (or (and (any "bB")
+                                                  (? (any "-+"))
+                                                  (+ (any "01")))
+                                             (and (any "oO")
+                                                  (? (any "-+"))
+                                                  (+ (any "0-7")))
+                                             (and (any "xX")
+                                                  (? (any "-+"))
+                                                  (+ hex-digit))
+                                             (and (or (and (any "1-2") (any "0-9"))
+                                                      (and "3" (any "0-6"))
+                                                      (any "2-9"))
+                                                  (any "rR")
+                                                  (? (any "-+"))
+                                                  (+ (any "0-9a-zA-Z"))))))
+                                symbol-end))
+                           . font-lock-number-literal)
+
+                          ;; Noise
+                          (,(rx (any "().[]")) . 'font-lock-noise)
+                          ))
+
+;; rustic-mode
+;; TODO: Make [] and () not highlighted in attributes.
+(font-lock-add-keywords 'rustic-mode
+                        `(;; Noise
+                          (,(rx (any "{}[]()'")) . 'font-lock-noise)
+                          
+                          ;; Boolean literals
+                          (,(rx (and symbol-start
+                                     (or "false" "true")
+                                     symbol-end))
+                           . 'font-lock-boolean-literal)
+                          
+                          ;; Number literals
+                          (,(rx (and symbol-start
+                                     (or (and "0x"
+                                              (+ hex-digit)
+                                              (? (and "_" (+ hex-digit))))
+                                         (and "0o"
+                                              (+ (any "0-7"))
+                                              (? (and "_" (+ (any "0-7")))))
+                                         (and "0b"
+                                              (+ (any "01"))
+                                              (? (and "_" (+ (any "01")))))
+                                         (and (+ (any "0-9"))
+                                              (? (and "_" (+ (any "0-9"))))
+                                              (? (and "." (+ (any "0-9"))))))
+                                     symbol-end))
+                           . 'font-lock-number-literal)
+                          
+                          ;; Operators
+                          ;; URL `https://doc.rust-lang.org/book/appendix-02-operators.html'
+                          (,(rx (or "!"
+                                    "!="
+                                    "%"
+                                    "%="
+                                    "&"
+                                    "&="
+                                    "&&"
+                                    "*"
+                                    "*="
+                                    "+"
+                                    "+="
+                                    ","
+                                    "-"
+                                    "-="
+                                    "->"
+                                    ".."
+                                    "..="
+                                    "..."
+                                    "/"
+                                    "/="
+                                    ":"
+                                    ";"
+                                    "<<"
+                                    "<<="
+                                    "<"
+                                    "<="
+                                    "="
+                                    "=="
+                                    "=>"
+                                    ">"
+                                    ">="
+                                    ">>"
+                                    ">>="
+                                    "@"
+                                    "^"
+                                    "^="
+                                    "|"
+                                    "|="
+                                    "||"
+                                    "?"
+                                    "."))
+                           . 'font-lock-operator)
+                          ))
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path) load-file-name)
