@@ -1,6 +1,6 @@
 # anirak-theme.el
 
-Dark theme based on the [Anirak VSCode theme](https://github.com/barjoco/anirak) by [barjoco](https://github.com/barjoco).
+Dark theme based on the [Anirak VSCode theme](https://github.com/barjoco/anirak) by [barjoco](https://github.com/barjoco).  
 Many thanks to [NerdyPepper](https://github.com/NerdyPepper) that influenced my taste in colorschemes with [this article](https://peppe.rs/posts/color_conundrum/).
 
 ## Screenshots
