@@ -530,6 +530,80 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
     ',modes))
 
 (anirak/multi-font-lock-add-keywords
+ (lisp-mode scheme-mode)
+ `(
+   ;; Number literals
+   ;; TODO: Improve
+   (,(rx (and (or (and
+                   symbol-start
+                   (or
+                    (and
+                     (? (any "-+"))
+                     (+ digit)
+                     (? (or (and (any "eE")
+                                 (? (any "-+"))
+                                 (+ digit))
+                            (and "."
+                                 (? (and (+ digit)
+                                         (? (and
+                                             (any "eE")
+                                             (? (any "-+"))
+                                             (+ digit))))))
+                            (and "/"
+                                 (+ digit)))))
+                    (and
+                     "."
+                     (+ digit)
+                     (? (and
+                         (any "eE")
+                         (? (any "-+"))
+                         (+ digit))))))
+                  (and "#"
+                       symbol-start
+                       (or (and (any "bB")
+                                (? (any "-+"))
+                                (+ (any "01")))
+                           (and (any "oO")
+                                (? (any "-+"))
+                                (+ (any "0-7")))
+                           (and (any "xX")
+                                (? (any "-+"))
+                                (+ hex-digit)))))
+              symbol-end))
+    . 'anirak/font-lock-number-literal)
+   ))
+
+(anirak/multi-font-lock-add-keywords
+ (clojure-mode)
+ `(
+   ;; Number literals
+   ;; TODO: Improve
+   (,(rx (and symbol-start
+              (? "-")
+              digit
+              (*? any)
+              symbol-end))
+    . 'anirak/font-lock-number-literal)
+   ))
+
+(anirak/multi-font-lock-add-keywords
+ (julia-mode ess-julia-mode)
+ `(
+   ;; Number literals
+   ;; TODO: Improve
+   (,(rx (and symbol-start
+              (or (and (+ digit)
+                       (? (and "." (* digit)))
+                       (? (and (any "eE")
+                               (? (any "-+"))
+                               (+ digit))))
+                  (and "0"
+                       (any "xX")
+                       (+ hex-digit)))))
+    . 'anirak/font-lock-number-literal)
+   ))
+
+(anirak/multi-font-lock-add-keywords
  (css-mode)
  `(
    ;; Number literals
@@ -559,6 +633,13 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
 
    ;; Noise
    (,(rx (any ":,;{}[]()>.")) . 'anirak/font-lock-noise)
+   ))
+
+(anirak/multi-font-lock-add-keywords
+ (nxml-mode)
+ `(
+   ;; Noise
+   (,(rx (any "=</>?")) . 'anirak/font-lock-noise)
    ))
 
 (anirak/multi-font-lock-add-keywords
