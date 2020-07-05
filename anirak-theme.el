@@ -48,21 +48,22 @@
 ;;; Code:
 
 (defconst anirak/colors
-  '((cyan . "#9ccdff")
-    (white . "#f0f8ff")
-    (blue . "#599aff")
-    (gray . "#757c88")
-    ;; A 5% lighter version of `gray-darker` for things that are
+  '((builtin . "#9ccdff")
+    (foreground . "#f0f8ff")
+    (string-literal . "#599aff")
+    (dimmed . "#757c88")
+    ;; A 5% lighter version of `dimmed-darker` for things that are
     ;; important (like comments).
-    (gray-darker-important . "#4c5059")
-    (gray-darker . "#40444b")
-    (gray-darkest . "#21232b")
-    (black . "#0c0d10")
-    (black-cursor-line . "#13141a")
-    (blue-cursor . "#303eff")
-    (green . "#17ff93")
-    (blue-selection . "#15194c")
-    (blue-fold . "#10132f")
+    (dimmed-darker-important . "#4c5059")
+    (dimmed-darker . "#40444b")
+    (dimmed-darkest . "#21232b")
+    (background . "#0c0d10")
+    (background-cursor-line . "#13141a")
+    (cursor . "#303eff")
+    (accent . "#17ff93")
+    (selection . "#15194c")
+    ;; TODO: Yet to be used
+    (fold . "#10132f")
     (highlight-inactive . "#233551")
     (highlight-active . "#426498")
     (lint-error-bg . "#241517")
@@ -73,12 +74,12 @@
     (lint-info-fg . "#00b7e4")
     (lint-warning-bg . "#271c13")
     (lint-warning-fg . "#fa973a")
-    (lint-yellow-underline . "#ffe89e")
+    ;; TODO: Yet to be used
+    (lint-underline . "#ffe89e")
     (menu-active-bg . "#3a3d46")
     (menu-inactive-bg . "#21232b")
     (menu-sthumb . "#3c3e46")
     (debugging . "#ff0000")
-    (prova . "#4a55c1")
     (term-0 . "#1e2227")
     (term-1 . "#ff4766")
     (term-2 . "#17ff93")
@@ -159,94 +160,94 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
 (anirak/set-theme
  `(
    ;; Standard font lock faces
-   (default :foreground ,white :background ,black)
+   (default :foreground ,foreground :background ,background)
    (bold :weight bold)
    (bold-italic :slant italic :weight bold)
    (underline :underline t)
    (italic :slant italic)
    ;; :foreground
-   (font-lock-builtin-face :foreground ,gray)
+   (font-lock-builtin-face :foreground ,dimmed)
    ;; Comment prefix
-   (font-lock-comment-delimiter-face :foreground ,gray-darker-important)
+   (font-lock-comment-delimiter-face :foreground ,dimmed-darker-important)
    ;; Text of a comment
-   (font-lock-comment-face :foreground ,gray-darker-important)
+   (font-lock-comment-face :foreground ,dimmed-darker-important)
    ;; \`...\'
-   (font-lock-constant-face :foreground ,white :weight bold)
+   (font-lock-constant-face :foreground ,foreground :weight bold)
    ;; Doc comment of a function: (defun ... () "...")
-   (font-lock-doc-face :foreground ,blue)
+   (font-lock-doc-face :foreground ,string-literal)
    (font-lock-doc-string-face :foreground ,debugging)
    ;; Function name
-   (font-lock-function-name-face :foreground ,white :weight bold)
+   (font-lock-function-name-face :foreground ,foreground :weight bold)
    ;; Noise symbols -> { } , ( ) [ ] :
-   (anirak/font-lock-noise :foreground ,gray)
+   (anirak/font-lock-noise :foreground ,dimmed)
    ;; Number literals
-   (anirak/font-lock-number-literal :foreground ,green)
+   (anirak/font-lock-number-literal :foreground ,accent)
    ;; Boolean literals
-   (anirak/font-lock-boolean-literal :foreground ,green)
+   (anirak/font-lock-boolean-literal :foreground ,accent)
    ;; Operators
-   (anirak/font-lock-operator :foreground ,gray)
+   (anirak/font-lock-operator :foreground ,dimmed)
    ;; Keyword
-   (font-lock-keyword-face :foreground ,cyan)
+   (font-lock-keyword-face :foreground ,builtin)
    ;; In regexp string, the caret -> [^z-a]
-   (font-lock-negation-char-face :foreground ,gray)
-   (font-lock-preprocessor-face :foreground ,white :weight bold)
+   (font-lock-negation-char-face :foreground ,dimmed)
+   (font-lock-preprocessor-face :foreground ,foreground :weight bold)
    (font-lock-preprocessor-char-face :foreground ,debugging)
-   (font-lock-regexp-grouping-backslash :foreground ,gray-darker)
-   (font-lock-regexp-grouping-construct :foreground ,gray)
+   (font-lock-regexp-grouping-backslash :foreground ,dimmed-darker)
+   (font-lock-regexp-grouping-construct :foreground ,dimmed)
    ;; String
-   (font-lock-string-face :foreground ,blue)
+   (font-lock-string-face :foreground ,string-literal)
    ;; TODO: Not sure
-   (font-lock-type-face :foreground ,white :weight bold)
+   (font-lock-type-face :foreground ,foreground :weight bold)
    ;; Variable name
-   (font-lock-variable-name-face :foreground ,white)
+   (font-lock-variable-name-face :foreground ,foreground)
    ;; Warning (like `error')
    (font-lock-warning-face :weight bold :foreground ,lint-warning-fg :background ,lint-warning-bg)
-   (shadow :foreground ,gray)
+   (shadow :foreground ,dimmed)
    ;; TODO: Not sure
    (success :foreground ,lint-hint-fg :background ,lint-hint-bg)
    ;; TODO: Not sure
    (error :foreground ,lint-error-fg :background ,lint-error-bg)
    ;; TODO: Not sure
    (warning :foreground ,lint-warning-fg :background ,lint-warning-bg)
-   (tooltip :foreground ,debugging :background ,green :inverse-video t)
+   (tooltip :foreground ,debugging :background ,accent :inverse-video t)
 
    ;; Emacs interface
    ;; NOTE: Emacs ignores foreground for cursor.
-   (cursor :background ,blue-cursor :foreground ,white)
+   (cursor :background ,cursor :foreground ,foreground)
    ;; TODO: Long line break arrow fringe
-   (fringe :background ,black :foreground ,gray-darker)
+   (fringe :background ,background :foreground ,dimmed-darker)
    ;; Line numbers
-   (linum :background ,black :foreground ,gray-darker)
-   (line-number :background ,black :foreground ,gray-darker)
-   (line-number-current-line :inherit line-number :foreground ,white)
+   (linum :background ,background :foreground ,dimmed-darker)
+   (line-number :background ,background :foreground ,dimmed-darker)
+   (line-number-current-line :inherit line-number :foreground ,foreground)
    (fill-column-indicator :foreground ,debugging :weight normal :slant normal
                           :underline nil :overline nil :strike-through nil
                           :box nil :inverse-video nil :stipple nil)
    ;; Vertical border that separates windows
-   (vertical-border :foreground ,gray-darkest)
+   (vertical-border :foreground ,dimmed-darkest)
    (border :background ,debugging :foreground ,debugging)
    ;; Visual selection
-   (highlight :background ,blue-selection :foreground nil)
+   (highlight :background ,selection :foreground nil)
    ;; Highlight current line
-   (hl-line :background ,black-cursor-line)
+   (hl-line :background ,background-cursor-line)
    ;; Active mode line
-   (mode-line :foreground ,white :background ,gray-darkest :weight normal
-              :box (:line-width 1 :color ,gray-darkest))
+   (mode-line :foreground ,foreground :background ,dimmed-darkest :weight normal
+              :box (:line-width 1 :color ,dimmed-darkest))
    ;; Like *Messages*
    (mode-line-buffer-id :foreground nil, :background nil)
    ;; Inactive mode line
    (mode-line-inactive :inherit mode-line
-                       :foreground ,gray-darker
-                       :background ,black)
+                       :foreground ,dimmed-darker
+                       :background ,background)
    (mode-line-emphasis :foreground ,debugging :slant italic)
    ;; TODO: Not sure
-   (mode-line-highlight :background ,blue-selection :box nil)
-   (minibuffer-prompt :foreground ,gray)
+   (mode-line-highlight :background ,selection :box nil)
+   (minibuffer-prompt :foreground ,dimmed)
    ;; Visual selection
-   (region :background ,blue-selection :foreground nil :extend t)
+   (region :background ,selection :foreground nil :extend t)
    (secondary-selection :background ,debugging :foreground nil :extend t)
    ;; Header line
-   (header-line :inherit mode-line-inactive :foreground ,white :background nil)
+   (header-line :inherit mode-line-inactive :foreground ,foreground :background nil)
 
    ;; search
    (match :foreground ,lint-info-fg :background ,lint-info-bg)
@@ -257,20 +258,20 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    ;; Failed search
    (isearch-fail :background ,lint-error-bg :foreground ,lint-error-fg :weight bold)
    ;; Links like in Help mode
-   (link :foreground ,cyan :underline t)
+   (link :foreground ,builtin :underline t)
    (widget-button :foreground ,debugging :background ,debugging :underline t)
    ;; Like a search bar background.
-   (widget-field :background ,menu-inactive-bg :box (:line-width 1 :color ,gray-darker))
+   (widget-field :background ,menu-inactive-bg :box (:line-width 1 :color ,dimmed-darker))
    ;; Buttons.
-   (custom-button :background ,gray-darker :foreground ,white)
+   (custom-button :background ,dimmed-darker :foreground ,foreground)
    ;; Buttons on mouse hover.
    ;; TODO: On mouse down.
-   (custom-button-mouse :background ,gray-darkest :foreground nil)
+   (custom-button-mouse :background ,dimmed-darkest :foreground nil)
    ;; Like the message "NO CUSTOMIZATION DATA; not intended to be
    ;; customized" in custom-mode.
    (custom-state :background ,lint-hint-bg :foreground ,lint-hint-fg)
    ;; Like the face tag in custom-mode.
-   (custom-face-tag :foreground ,white :weight bold)
+   (custom-face-tag :foreground ,foreground :weight bold)
 
    ;; diff-mode (built-in)
    ;; Used also by evil for search and replace (:%s) preview.
@@ -284,16 +285,16 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (diff-indicator-changed :inherit diff-changed)
    ;; TODO: Not sure
    (diff-indicator-removed :inherit diff-removed)
-   (diff-context :background ,debugging :foreground ,green)
-   (diff-file-header :background ,debugging :foreground ,green)
-   (diff-function :background ,debugging :foreground ,green)
-   (diff-header :background ,debugging :foreground ,green)
-   (diff-hunk-header :background ,debugging :foreground ,green)
-   (diff-index :background ,debugging :foreground ,green)
-   (diff-nonexistent :background ,debugging :foreground ,green)
-   (diff-refined-added :background ,debugging :foreground ,green)
-   (diff-refined-changed :background ,debugging :foreground ,green)
-   (diff-refined-removed :background ,debugging :foreground ,green)
+   (diff-context :background ,debugging :foreground ,accent)
+   (diff-file-header :background ,debugging :foreground ,accent)
+   (diff-function :background ,debugging :foreground ,accent)
+   (diff-header :background ,debugging :foreground ,accent)
+   (diff-hunk-header :background ,debugging :foreground ,accent)
+   (diff-index :background ,debugging :foreground ,accent)
+   (diff-nonexistent :background ,debugging :foreground ,accent)
+   (diff-refined-added :background ,debugging :foreground ,accent)
+   (diff-refined-changed :background ,debugging :foreground ,accent)
+   (diff-refined-removed :background ,debugging :foreground ,accent)
 
    ;; ansi-term (built-in)
    ;; Color 0
@@ -327,25 +328,25 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (vterm-color-white :background ,term-7 :foreground ,term-7)
 
    ;; eshell (built-in)
-   (eshell-prompt :foreground ,gray :weight bold)
+   (eshell-prompt :foreground ,dimmed :weight bold)
    ;; .zip files for example
-   (eshell-ls-archive :foreground ,blue)
+   (eshell-ls-archive :foreground ,string-literal)
    ;; .bak files for example
-   (eshell-ls-backup :foreground ,gray)
+   (eshell-ls-backup :foreground ,dimmed)
    (eshell-ls-clutter :foreground ,debugging :weight bold)
-   (eshell-ls-directory :foreground ,blue :weight bold)
-   (eshell-ls-executable :foreground ,green :weight bold)
+   (eshell-ls-directory :foreground ,string-literal :weight bold)
+   (eshell-ls-executable :foreground ,accent :weight bold)
    (eshell-ls-missing :foreground ,debugging :weight bold)
    (eshell-ls-product :foreground ,debugging)
    (eshell-ls-readonly :foreground ,debugging)
    (eshell-ls-special :foreground ,debugging :weight bold)
-   (eshell-ls-symlink :foreground ,cyan :weight bold)
+   (eshell-ls-symlink :foreground ,builtin :weight bold)
    ;; TODO: Not sure
-   (eshell-ls-unreadable :foreground ,gray-darker)
+   (eshell-ls-unreadable :foreground ,dimmed-darker)
 
    ;; ElDoc (built-in)
    ;; Bottom line function ARGS keyword
-   (eldoc-highlight-function-argument :foreground ,green :weight bold)
+   (eldoc-highlight-function-argument :foreground ,accent :weight bold)
 
    ;; Flycheck (built-in)
    (flycheck-error :underline (:style wave :color ,lint-error-fg))
@@ -361,7 +362,7 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (flycheck-color-mode-line-success-face :foreground ,debugging)
 
    ;; Parenthesis matching (built-in)
-   (show-paren-match :background ,gray-darkest)
+   (show-paren-match :background ,dimmed-darkest)
    (show-paren-mismatch :background nil :foreground nil)
 
    ;; whitespace (built-in)
@@ -371,11 +372,11 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (whitespace-indentation :background ,debugging :foreground ,debugging)
    ;; Too long line
    (whitespace-line :underline (:style wave :color ,lint-error-fg))
-   (whitespace-newline :foreground ,gray-darker)
-   (whitespace-space :foreground ,gray-darker)
-   (whitespace-space-after-tab :foreground ,gray-darker)
-   (whitespace-space-before-tab :foreground ,gray-darker)
-   (whitespace-tab :foreground ,gray-darker)
+   (whitespace-newline :foreground ,dimmed-darker)
+   (whitespace-space :foreground ,dimmed-darker)
+   (whitespace-space-after-tab :foreground ,dimmed-darker)
+   (whitespace-space-before-tab :foreground ,dimmed-darker)
+   (whitespace-tab :foreground ,dimmed-darker)
    (whitespace-trailing :underline (:style wave :color ,lint-error-fg))
    (trailing-whitespace :inherit whitespace-trailing)
 
@@ -390,16 +391,16 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (company-preview-common :background ,lint-info-bg :foreground ,lint-info-fg)
    (company-preview-search :inherit company-preview :foreground ,debugging)
    ;; Company completion menu inactive rows
-   (company-tooltip :background ,menu-inactive-bg :foreground ,gray)
+   (company-tooltip :background ,menu-inactive-bg :foreground ,dimmed)
    ;; Company completion menu active row
-   (company-tooltip-selection :background ,menu-active-bg :foreground ,white)
+   (company-tooltip-selection :background ,menu-active-bg :foreground ,foreground)
    ;; Company completion menu active text in all rows
-   (company-tooltip-common :foreground ,white :weight bold)
+   (company-tooltip-common :foreground ,foreground :weight bold)
    ;; Company completion menu active text in active row
    (company-tooltip-common-selection :inherit company-tooltip-common)
    (company-tooltip-search :inherit company-tooltip :foreground ,debugging)
-   (company-tooltip-annotation :inherit company-tooltip :foreground ,gray)
-   (company-tooltip-annotation-selection :inherit company-tooltip-selection :foreground ,gray)
+   (company-tooltip-annotation :inherit company-tooltip :foreground ,dimmed)
+   (company-tooltip-annotation-selection :inherit company-tooltip-selection :foreground ,dimmed)
    ;; Scrollbar thumb background
    (company-scrollbar-bg :background ,menu-inactive-bg)
    ;; Scrollbar background
@@ -410,21 +411,21 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    ;; TODO: Mouse hover
    (ivy-action :foreground ,debugging)
    (ivy-confirm-face :foreground ,debugging)
-   (ivy-current-match :background ,gray-darkest :foreground ,cyan :weight bold)
-   (ivy-cursor :background ,blue-cursor)
+   (ivy-current-match :background ,dimmed-darkest :foreground ,builtin :weight bold)
+   (ivy-cursor :background ,cursor)
    ;; Like the (match-required) message in swiper
    (ivy-match-required-face :foreground ,lint-error-fg :background ,lint-error-bg)
    (ivy-remote :foreground ,debugging)
-   (ivy-subdir :foreground ,cyan)
-   (ivy-virtual :foreground ,gray)
-   (ivy-minibuffer-match-face-1 :foreground ,white :weight bold)
-   (ivy-minibuffer-match-face-2 :foreground ,white :weight bold)
-   (ivy-minibuffer-match-face-3 :foreground ,white :weight bold)
-   (ivy-minibuffer-match-face-4 :foreground ,white :weight bold)
+   (ivy-subdir :foreground ,builtin)
+   (ivy-virtual :foreground ,dimmed)
+   (ivy-minibuffer-match-face-1 :foreground ,foreground :weight bold)
+   (ivy-minibuffer-match-face-2 :foreground ,foreground :weight bold)
+   (ivy-minibuffer-match-face-3 :foreground ,foreground :weight bold)
+   (ivy-minibuffer-match-face-4 :foreground ,foreground :weight bold)
    (ivy-highlight-face :foreground ,debugging :weight bold)
    (ivy-minibuffer-match-highlight :foreground ,debugging)
-   (ivy-modified-buffer :foreground ,white)
-   (ivy-modified-outside-buffer :foreground ,white)
+   (ivy-modified-buffer :foreground ,foreground)
+   (ivy-modified-outside-buffer :foreground ,foreground)
    (ivy-prompt-match :foreground ,debugging)
    (ivy-separator :foreground ,debugging)
    (ivy-grep-info :foreground ,debugging)
@@ -433,11 +434,11 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (ivy-yanked-word :foreground ,debugging)
 
    ;; markdown
-   (markdown-url-face :foreground ,white :underline t)
-   (markdown-link-face :foreground ,blue)
+   (markdown-url-face :foreground ,foreground :underline t)
+   (markdown-link-face :foreground ,string-literal)
    ;; TODO: Search the face for *Helpful* mouse hover
-   (markdown-highlight-face :background ,blue-selection :foreground ,white)
-   (markdown-markup-face :foreground ,gray)
+   (markdown-highlight-face :background ,selection :foreground ,foreground)
+   (markdown-markup-face :foreground ,dimmed)
    ;; TODO: Define fixed-pitch font
    (markdown-code-face :inherit fixed-pitch)
    ;; TODO: Define fixed-pitch font
@@ -462,42 +463,42 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
    (lsp-ui-sideline-symbol-info :foreground ,debugging :background ,debugging)
 
    ;; evil-mode
-   (evil-ex-commands :background ,green :foreground ,debugging)
+   (evil-ex-commands :background ,accent :foreground ,debugging)
    ;; Warnings and errors on the evil command line
    (evil-ex-info :background ,lint-warning-bg :foreground ,lint-warning-fg)
-   (evil-ex-lazy-highlight :background ,green :foreground ,debugging)
-   (evil-ex-search :background ,green :foreground ,debugging)
-   (evil-ex-substitute-matches :background ,debugging :foreground ,green)
-   (evil-ex-substitute-replacement :background ,debugging :foreground ,green)
+   (evil-ex-lazy-highlight :background ,accent :foreground ,debugging)
+   (evil-ex-search :background ,accent :foreground ,debugging)
+   (evil-ex-substitute-matches :background ,lint-error-bg :foreground ,lint-error-fg)
+   (evil-ex-substitute-replacement :background ,lint-hint-bg :foreground ,lint-hint-fg)
 
    ;; hydra
    (hydra-face-red :background ,lint-error-bg :foreground ,lint-error-fg)
-   (hydra-face-teal :background ,green :foreground ,debugging)
-   (hydra-face-pink :background ,green :foreground ,debugging)
-   (hydra-face-blue :background ,green :foreground ,debugging)
-   (hydra-face-amaranth :background ,green :foreground ,debugging)
+   (hydra-face-teal :background ,accent :foreground ,debugging)
+   (hydra-face-pink :background ,accent :foreground ,debugging)
+   (hydra-face-blue :background ,accent :foreground ,debugging)
+   (hydra-face-amaranth :background ,accent :foreground ,debugging)
 
    ;; evil-mc
-   (evil-mc-cursor-bar-face :foreground ,debugging :background ,green)
+   (evil-mc-cursor-bar-face :foreground ,debugging :background ,accent)
    ;; Non active cursors.
    (evil-mc-cursor-default-face :background ,highlight-active)
-   (evil-mc-cursor-hbar-face :foreground ,debugging :background ,green)
+   (evil-mc-cursor-hbar-face :foreground ,debugging :background ,accent)
    ;; Non active cursors selections.
    (evil-mc-region-face :background ,highlight-inactive)
 
    ;; evil-snipe
-   ;; (evil-snipe-first-match-face (:foreground ,debugging :background ,green))
-   ;; (evil-snipe-matches-face (:foreground ,debugging :background ,green))
+   ;; (evil-snipe-first-match-face (:foreground ,debugging :background ,accent))
+   ;; (evil-snipe-matches-face (:foreground ,debugging :background ,accent))
    ))
 
 (anirak/eval-with-colors
  (
   ;; fill-column-indicator
   (setq fci-rule-width 1
-        fci-rule-color gray-darkest)
+        fci-rule-color dimmed-darkest)
 
   ;; lsp-ui
-  (setq lsp-ui-doc-border gray-darker)
+  (setq lsp-ui-doc-border dimmed-darker)
 
   ;; rustic
   (setq rustic-ansi-faces `[,term-0 ,term-1 ,term-2 ,term-3
@@ -505,23 +506,23 @@ Every color in every sexpr in BODY gets expanded to the actual color string."
   ;; hl-todo
   (setq hl-todo-keyword-faces
         `(;; For things that need to be done, just not today.
-          ("TODO" . ,green)
+          ("TODO" . ,accent)
           ;; For problems that will become bigger problems later if
           ;; not fixed ASAP.
-          ("FIXME" . ,green)
+          ("FIXME" . ,accent)
           ;; For tidbits that are unconventional and not intended uses
           ;; of the constituent parts, and may break in a future
           ;; update.
-          ("HACK" . ,green)
+          ("HACK" . ,accent)
           ;; For things that were done hastily and/or hasn't been
           ;; thoroughly tested. It may not even be necessary!
-          ("REVIEW" . ,green)
+          ("REVIEW" . ,accent)
           ;; For especially important gotchas with a given
           ;; implementation, directed at another user other than the
           ;; author.
-          ("NOTE" . ,green)
+          ("NOTE" . ,accent)
           ;; For things that just gotta go and will soon be gone.
-          ("DEPRECATED" . ,green)))))
+          ("DEPRECATED" . ,accent)))))
 
 (defmacro anirak/multi-font-lock-add-keywords (modes alist)
   "Similiar to `font-lock-add-keywords' but let's you apply ALIST to every mode in MODES."
