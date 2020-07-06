@@ -154,6 +154,10 @@
                  (cdr (assoc variant anirak/colors)))
      ,@body))
 
+;; TODO: Add :attribute nil to every attribute that is not specified.
+;; For example if :background is not specified add :background nil.
+;; This ensures that when the user switches theme, a color of the
+;; previous theme isn't used.
 (defmacro anirak/create-theme (variant body)
   "Macro that simplifies the declaration of the theme.
 
@@ -221,43 +225,43 @@ string of variant VARIANT from `anirak/colors'."
         (underline :underline t)
         (italic :slant italic)
         ;; :foreground
-        (font-lock-builtin-face :foreground ,dimmed)
+        (font-lock-builtin-face :foreground ,dimmed :background nil)
         ;; Comment prefix
-        (font-lock-comment-delimiter-face :foreground ,dimmed-darker-important)
+        (font-lock-comment-delimiter-face :foreground ,dimmed-darker-important :background nil)
         ;; Text of a comment
-        (font-lock-comment-face :foreground ,dimmed-darker-important)
+        (font-lock-comment-face :foreground ,dimmed-darker-important :background nil)
         ;; \`...\'
-        (font-lock-constant-face :foreground ,foreground :weight bold)
+        (font-lock-constant-face :foreground ,foreground :weight bold :background nil)
         ;; Doc comment of a function: (defun ... () "...")
-        (font-lock-doc-face :foreground ,string-literal)
-        (font-lock-doc-string-face :foreground ,debugging)
+        (font-lock-doc-face :foreground ,string-literal :background nil)
+        (font-lock-doc-string-face :foreground ,debugging :background nil)
         ;; Function name
-        (font-lock-function-name-face :foreground ,foreground :weight bold)
+        (font-lock-function-name-face :foreground ,foreground :weight bold :background nil)
         ;; Noise symbols -> { } , ( ) [ ] :
-        (anirak/font-lock-noise :foreground ,dimmed)
+        (anirak/font-lock-noise :foreground ,dimmed :background nil)
         ;; Number literals
-        (anirak/font-lock-number-literal :foreground ,accent)
+        (anirak/font-lock-number-literal :foreground ,accent :background nil)
         ;; Boolean literals
-        (anirak/font-lock-boolean-literal :foreground ,accent)
+        (anirak/font-lock-boolean-literal :foreground ,accent :background nil)
         ;; Operators
-        (anirak/font-lock-operator :foreground ,dimmed)
+        (anirak/font-lock-operator :foreground ,dimmed :background nil)
         ;; Keyword
-        (font-lock-keyword-face :foreground ,builtin)
+        (font-lock-keyword-face :foreground ,builtin :background nil)
         ;; In regexp string, the caret -> [^z-a]
-        (font-lock-negation-char-face :foreground ,dimmed)
-        (font-lock-preprocessor-face :foreground ,foreground :weight bold)
-        (font-lock-preprocessor-char-face :foreground ,debugging)
-        (font-lock-regexp-grouping-backslash :foreground ,dimmed-darker)
-        (font-lock-regexp-grouping-construct :foreground ,dimmed)
+        (font-lock-negation-char-face :foreground ,dimmed :background nil)
+        (font-lock-preprocessor-face :foreground ,foreground :weight bold :background nil)
+        (font-lock-preprocessor-char-face :foreground ,debugging :background nil)
+        (font-lock-regexp-grouping-backslash :foreground ,dimmed-darker :background nil)
+        (font-lock-regexp-grouping-construct :foreground ,dimmed :background nil)
         ;; String
-        (font-lock-string-face :foreground ,string-literal)
+        (font-lock-string-face :foreground ,string-literal :background nil)
         ;; TODO: Not sure
-        (font-lock-type-face :foreground ,foreground :weight bold)
+        (font-lock-type-face :foreground ,foreground :weight bold :background nil)
         ;; Variable name
-        (font-lock-variable-name-face :foreground ,foreground)
+        (font-lock-variable-name-face :foreground ,foreground :background nil)
         ;; Warning (like `error')
         (font-lock-warning-face :weight bold :foreground ,lint-warning-fg :background ,lint-warning-bg)
-        (shadow :foreground ,dimmed)
+        (shadow :foreground ,dimmed :background nil)
         ;; TODO: Not sure
         (success :foreground ,lint-hint-fg :background ,lint-hint-bg)
         ;; TODO: Not sure
@@ -274,17 +278,18 @@ string of variant VARIANT from `anirak/colors'."
         ;; Line numbers
         (linum :background ,background :foreground ,dimmed-darker)
         (line-number :background ,background :foreground ,dimmed-darker)
-        (line-number-current-line :inherit line-number :foreground ,foreground)
+        (line-number-current-line :inherit line-number :foreground ,foreground :background nil)
         (fill-column-indicator :foreground ,debugging :weight normal :slant normal
                                :underline nil :overline nil :strike-through nil
-                               :box nil :inverse-video nil :stipple nil)
+                               :box nil :inverse-video nil :stipple nil
+                               :background nil)
         ;; Vertical border that separates windows
-        (vertical-border :foreground ,dimmed-darkest)
+        (vertical-border :foreground ,dimmed-darkest :background nil)
         (border :background ,debugging :foreground ,debugging)
         ;; Visual selection
         (highlight :background ,selection :foreground nil)
         ;; Highlight current line
-        (hl-line :background ,background-cursor-line)
+        (hl-line :background ,background-cursor-line :foreground nil)
         ;; Active mode line
         (mode-line :foreground ,foreground :background ,dimmed-darkest :weight normal
                    :box (:line-width 1 :color ,dimmed-darkest))
@@ -294,10 +299,10 @@ string of variant VARIANT from `anirak/colors'."
         (mode-line-inactive :inherit mode-line
                             :foreground ,dimmed-darker
                             :background ,background)
-        (mode-line-emphasis :foreground ,debugging :slant italic)
+        (mode-line-emphasis :foreground ,debugging :slant italic :background nil)
         ;; TODO: Not sure
-        (mode-line-highlight :background ,selection :box nil)
-        (minibuffer-prompt :foreground ,dimmed)
+        (mode-line-highlight :background ,selection :box nil :foreground nil)
+        (minibuffer-prompt :foreground ,dimmed :background nil)
         ;; Visual selection
         (region :background ,selection :foreground nil :extend t)
         (secondary-selection :background ,debugging :foreground nil :extend t)
@@ -307,16 +312,17 @@ string of variant VARIANT from `anirak/colors'."
         ;; search
         (match :foreground ,lint-info-fg :background ,lint-info-bg)
         ;; Active search result
-        (isearch :background ,highlight-active)
+        (isearch :background ,highlight-active :foreground nil)
         ;; Inactive search results
-        (lazy-highlight :background ,highlight-inactive)
+        (lazy-highlight :background ,highlight-inactive :foreground nil)
         ;; Failed search
         (isearch-fail :background ,lint-error-bg :foreground ,lint-error-fg :weight bold)
         ;; Links like in Help mode
-        (link :foreground ,builtin :underline t)
+        (link :foreground ,builtin :underline t :background nil)
         (widget-button :foreground ,debugging :background ,debugging :underline t)
         ;; Like a search bar background.
-        (widget-field :background ,menu-inactive-bg :box (:line-width 1 :color ,dimmed-darker))
+        (widget-field :background ,menu-inactive-bg :foreground nil
+                      :box (:line-width 1 :color ,dimmed-darker))
         ;; Buttons.
         (custom-button :background ,dimmed-darker :foreground ,foreground)
         ;; Buttons on mouse hover.
@@ -326,7 +332,7 @@ string of variant VARIANT from `anirak/colors'."
         ;; customized" in custom-mode.
         (custom-state :background ,lint-hint-bg :foreground ,lint-hint-fg)
         ;; Like the face tag in custom-mode.
-        (custom-face-tag :foreground ,foreground :weight bold)
+        (custom-face-tag :foreground ,foreground :weight bold :background nil)
 
         ;; diff-mode (built-in)
         ;; Used also by evil for search and replace (:%s) preview.
@@ -383,25 +389,25 @@ string of variant VARIANT from `anirak/colors'."
         (vterm-color-white :background ,term-7 :foreground ,term-7)
 
         ;; eshell (built-in)
-        (eshell-prompt :foreground ,dimmed :weight bold)
+        (eshell-prompt :foreground ,dimmed :weight bold :background nil)
         ;; .zip files for example
-        (eshell-ls-archive :foreground ,string-literal)
+        (eshell-ls-archive :foreground ,string-literal :background nil)
         ;; .bak files for example
-        (eshell-ls-backup :foreground ,dimmed)
-        (eshell-ls-clutter :foreground ,debugging :weight bold)
-        (eshell-ls-directory :foreground ,string-literal :weight bold)
-        (eshell-ls-executable :foreground ,accent :weight bold)
-        (eshell-ls-missing :foreground ,debugging :weight bold)
-        (eshell-ls-product :foreground ,debugging)
-        (eshell-ls-readonly :foreground ,debugging)
-        (eshell-ls-special :foreground ,debugging :weight bold)
-        (eshell-ls-symlink :foreground ,builtin :weight bold)
+        (eshell-ls-backup :foreground ,dimmed :background nil)
+        (eshell-ls-clutter :foreground ,debugging :weight bold :background nil)
+        (eshell-ls-directory :foreground ,string-literal :weight bold :background nil)
+        (eshell-ls-executable :foreground ,accent :weight bold :background nil)
+        (eshell-ls-missing :foreground ,debugging :weight bold :background nil)
+        (eshell-ls-product :foreground ,debugging :background nil)
+        (eshell-ls-readonly :foreground ,debugging :background nil)
+        (eshell-ls-special :foreground ,debugging :weight bold :background nil)
+        (eshell-ls-symlink :foreground ,builtin :weight bold :background nil)
         ;; TODO: Not sure
-        (eshell-ls-unreadable :foreground ,dimmed-darker)
+        (eshell-ls-unreadable :foreground ,dimmed-darker :background nil)
 
         ;; ElDoc (built-in)
         ;; Bottom line function ARGS keyword
-        (eldoc-highlight-function-argument :foreground ,accent :weight bold)
+        (eldoc-highlight-function-argument :foreground ,accent :weight bold :background nil)
 
         ;; Flycheck (built-in)
         (flycheck-error :underline (:style wave :color ,lint-error-fg))
@@ -410,14 +416,14 @@ string of variant VARIANT from `anirak/colors'."
         (flycheck-fringe-error :background ,lint-error-fg :foreground ,lint-error-fg)
         (flycheck-fringe-info :background ,lint-info-fg :foreground ,lint-info-fg)
         (flycheck-fringe-warning :background ,lint-warning-fg, :foreground ,lint-warning-fg)
-        (flycheck-color-mode-line-error-face :foreground ,debugging)
-        (flycheck-color-mode-line-warning-face :foreground ,debugging)
-        (flycheck-color-mode-line-info-face :foreground ,debugging)
-        (flycheck-color-mode-line-running-face :foreground ,debugging)
-        (flycheck-color-mode-line-success-face :foreground ,debugging)
+        (flycheck-color-mode-line-error-face :foreground ,debugging :background nil)
+        (flycheck-color-mode-line-warning-face :foreground ,debugging :background nil)
+        (flycheck-color-mode-line-info-face :foreground ,debugging :background nil)
+        (flycheck-color-mode-line-running-face :foreground ,debugging :background nil)
+        (flycheck-color-mode-line-success-face :foreground ,debugging :background nil)
 
         ;; Parenthesis matching (built-in)
-        (show-paren-match :background ,selection)
+        (show-paren-match :background ,dimmed-darkest :foreground nil)
         (show-paren-mismatch :background nil :foreground nil)
 
         ;; whitespace (built-in)
@@ -427,73 +433,73 @@ string of variant VARIANT from `anirak/colors'."
         (whitespace-indentation :background ,debugging :foreground ,debugging)
         ;; Too long line
         (whitespace-line :underline (:style wave :color ,lint-error-fg))
-        (whitespace-newline :foreground ,dimmed-darker)
-        (whitespace-space :foreground ,dimmed-darker)
-        (whitespace-space-after-tab :foreground ,dimmed-darker)
-        (whitespace-space-before-tab :foreground ,dimmed-darker)
-        (whitespace-tab :foreground ,dimmed-darker)
-        (whitespace-trailing :underline (:style wave :color ,lint-error-fg))
-        (trailing-whitespace :inherit whitespace-trailing)
+        (whitespace-newline :foreground ,dimmed-darker :background nil)
+        (whitespace-space :foreground ,dimmed-darker :background nil)
+        (whitespace-space-after-tab :foreground ,dimmed-darker :background nil)
+        (whitespace-space-before-tab :foreground ,dimmed-darker :background nil)
+        (whitespace-tab :foreground ,dimmed-darker :background nil)
+        (whitespace-trailing :underline (:style wave :color ,lint-error-fg) :background nil)
+        (trailing-whitespace :inherit whitespace-trailing :background nil)
 
         ;; window-divider (built-in)
-        (window-divider :foreground ,debugging)
-        (window-divider-first-pixel :foreground ,debugging)
-        (window-divider-last-pixel :foreground ,debugging)
+        (window-divider :foreground ,debugging :background nil)
+        (window-divider-first-pixel :foreground ,debugging :background nil)
+        (window-divider-last-pixel :foreground ,debugging :background nil)
 
         ;; company
         (company-preview :foreground ,debugging :background ,debugging)
         ;; Last suggestion that gets previewed in the line
         (company-preview-common :background ,lint-info-bg :foreground ,lint-info-fg)
-        (company-preview-search :inherit company-preview :foreground ,debugging)
+        (company-preview-search :inherit company-preview :foreground ,debugging :background nil)
         ;; Company completion menu inactive rows
         (company-tooltip :background ,menu-inactive-bg :foreground ,dimmed)
         ;; Company completion menu active row
         (company-tooltip-selection :background ,menu-active-bg :foreground ,foreground)
         ;; Company completion menu active text in all rows
-        (company-tooltip-common :foreground ,foreground :weight bold)
+        (company-tooltip-common :foreground ,foreground :weight bold :background nil)
         ;; Company completion menu active text in active row
         (company-tooltip-common-selection :inherit company-tooltip-common)
-        (company-tooltip-search :inherit company-tooltip :foreground ,debugging)
-        (company-tooltip-annotation :inherit company-tooltip :foreground ,dimmed)
-        (company-tooltip-annotation-selection :inherit company-tooltip-selection :foreground ,dimmed)
+        (company-tooltip-search :inherit company-tooltip :foreground ,debugging :background nil)
+        (company-tooltip-annotation :inherit company-tooltip :foreground ,dimmed :background nil)
+        (company-tooltip-annotation-selection :inherit company-tooltip-selection :foreground ,dimmed :background nil)
         ;; Scrollbar thumb background
-        (company-scrollbar-bg :background ,menu-inactive-bg)
+        (company-scrollbar-bg :background ,menu-inactive-bg :foreground nil)
         ;; Scrollbar background
-        (company-scrollbar-fg :background ,menu-active-bg)
-        (company-echo-common :inherit company-echo :foreground ,debugging)
+        (company-scrollbar-fg :background ,menu-active-bg :foreground nil)
+        (company-echo-common :inherit company-echo :foreground ,debugging :background nil)
 
         ;; Ivy
         ;; TODO: Mouse hover
-        (ivy-action :foreground ,debugging)
-        (ivy-confirm-face :foreground ,debugging)
+        (ivy-action :foreground ,debugging :background nil)
+        (ivy-confirm-face :foreground ,debugging :background nil)
         (ivy-current-match :background ,dimmed-darkest :foreground ,builtin :weight bold)
-        (ivy-cursor :background ,cursor)
+        (ivy-cursor :background ,cursor :foreground nil)
         ;; Like the (match-required) message in swiper
         (ivy-match-required-face :foreground ,lint-error-fg :background ,lint-error-bg)
-        (ivy-remote :foreground ,debugging)
-        (ivy-subdir :foreground ,builtin)
-        (ivy-virtual :foreground ,dimmed)
-        (ivy-minibuffer-match-face-1 :foreground ,foreground :weight bold)
-        (ivy-minibuffer-match-face-2 :foreground ,foreground :weight bold)
-        (ivy-minibuffer-match-face-3 :foreground ,foreground :weight bold)
-        (ivy-minibuffer-match-face-4 :foreground ,foreground :weight bold)
-        (ivy-highlight-face :foreground ,debugging :weight bold)
-        (ivy-minibuffer-match-highlight :foreground ,debugging)
-        (ivy-modified-buffer :foreground ,foreground)
-        (ivy-modified-outside-buffer :foreground ,foreground)
-        (ivy-prompt-match :foreground ,debugging)
-        (ivy-separator :foreground ,debugging)
-        (ivy-grep-info :foreground ,debugging)
-        (ivy-grep-line-number :foreground ,debugging)
-        (ivy-completions-annotations :foreground ,debugging)
-        (ivy-yanked-word :foreground ,debugging)
+        (ivy-remote :foreground ,debugging :background nil)
+        (ivy-subdir :foreground ,builtin :background nil)
+        (ivy-virtual :foreground ,dimmed :background nil)
+        (ivy-minibuffer-match-face-1 :foreground ,foreground :weight bold :background nil)
+        (ivy-minibuffer-match-face-2 :foreground ,foreground :weight bold :background nil)
+        (ivy-minibuffer-match-face-3 :foreground ,foreground :weight bold :background nil)
+        (ivy-minibuffer-match-face-4 :foreground ,foreground :weight bold :background nil)
+        (ivy-highlight-face :foreground ,debugging :weight bold :background nil)
+        (ivy-minibuffer-match-highlight :foreground ,debugging :background nil)
+        (ivy-modified-buffer :foreground ,foreground :background nil)
+        (ivy-modified-outside-buffer :foreground ,foreground :background nil)
+        (ivy-prompt-match :foreground ,debugging :background nil)
+        (ivy-separator :foreground ,debugging :background nil)
+        (ivy-grep-info :foreground ,debugging :background nil)
+        (ivy-grep-line-number :foreground ,debugging :background nil)
+        (ivy-completions-annotations :foreground ,debugging :background nil)
+        (ivy-yanked-word :foreground ,debugging :background nil)
 
         ;; markdown
-        (markdown-url-face :foreground ,foreground :underline t)
-        (markdown-link-face :foreground ,string-literal)
+        (markdown-url-face :foreground ,foreground :underline t :background nil)
+        (markdown-link-face :foreground ,string-literal :background nil)
         ;; TODO: Search the face for *Helpful* mouse hover
         (markdown-highlight-face :background ,selection :foreground ,foreground)
-        (markdown-markup-face :foreground ,dimmed)
+        (markdown-markup-face :foreground ,dimmed :background nil)
         ;; TODO: Define fixed-pitch font
         (markdown-code-face :inherit fixed-pitch)
         ;; TODO: Define fixed-pitch font
@@ -501,10 +507,10 @@ string of variant VARIANT from `anirak/colors'."
 
         ;; lsp
         ;; TODO: Find face for the white sideline text.
-        (lsp-face-highlight-textual :background ,highlight-active)
-        (lsp-face-highlight-read :background ,highlight-inactive)
-        (lsp-face-highlight-write :background ,highlight-active)
-        (lsp-ui-doc-background :background ,menu-inactive-bg)
+        (lsp-face-highlight-textual :background ,highlight-active :foreground nil)
+        (lsp-face-highlight-read :background ,highlight-inactive :foreground nil)
+        (lsp-face-highlight-write :background ,highlight-active :foreground nil)
+        (lsp-ui-doc-background :background ,menu-inactive-bg :foreground nil)
         (lsp-ui-peek-filename :foreground ,debugging :background ,debugging)
         (lsp-ui-peek-header :foreground ,debugging :background ,debugging)
         (lsp-ui-peek-selection :foreground ,debugging :background ,debugging)
@@ -536,10 +542,10 @@ string of variant VARIANT from `anirak/colors'."
         ;; evil-mc
         (evil-mc-cursor-bar-face :foreground ,debugging :background ,accent)
         ;; Non active cursors.
-        (evil-mc-cursor-default-face :background ,highlight-active)
+        (evil-mc-cursor-default-face :background ,highlight-active :foreground nil)
         (evil-mc-cursor-hbar-face :foreground ,debugging :background ,accent)
         ;; Non active cursors selections.
-        (evil-mc-region-face :background ,highlight-inactive)
+        (evil-mc-region-face :background ,highlight-inactive :foreground nil)
 
         ;; evil-snipe
         ;; (evil-snipe-first-match-face (:foreground ,debugging :background ,accent))
